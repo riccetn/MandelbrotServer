@@ -52,12 +52,19 @@ public class MandelbrotServlet extends HttpServlet {
 			PrintWriter out = response.getWriter();
 			this.parseURI(request.getRequestURI());
 
+			//response.setContentType("application/x-portable-graymap");
 			response.setContentType("text/plain");
-			out.println("minC: " + minC);
-			out.println("maxC: " + maxC);
-			out.println("width: " + width);
-			out.println("height: " + height);
-			out.println("infN: " + infN);
+			out.println("P2"); // Magic for "Portable Gray Map" (PGM)
+			out.printf("%d %d%n", width, height);
+			out.println("255"); // No of shades of gray (and no there is not fifty)
+			for(int r = 0; r < height; ++r) {
+				for(int c = 0; c < width; ++c) {
+					if(c != 0)
+						out.write(' ');
+					out.print((r+c)%255);
+				}
+				out.println();
+			}
 		} catch(HttpError err) {
 			response.sendError(err.getStatus(), err.getMessage());
 		}
