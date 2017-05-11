@@ -35,11 +35,15 @@ public class MandelbrotServlet extends HttpServlet {
 		if(!uriMatcher.matches())
 			throw new NotFound();
 
-		minC = new Complex(Double.parseDouble(uriMatcher.group(1)), Double.parseDouble(uriMatcher.group(2)));
-		maxC = new Complex(Double.parseDouble(uriMatcher.group(3)), Double.parseDouble(uriMatcher.group(4)));
-		width = Integer.parseInt(uriMatcher.group(5));
-		height = Integer.parseInt(uriMatcher.group(6));
-		infN = Integer.parseInt(uriMatcher.group(7));
+		try {
+			minC = new Complex(Double.parseDouble(uriMatcher.group(1)), Double.parseDouble(uriMatcher.group(2)));
+			maxC = new Complex(Double.parseDouble(uriMatcher.group(3)), Double.parseDouble(uriMatcher.group(4)));
+			width = Integer.parseInt(uriMatcher.group(5));
+			height = Integer.parseInt(uriMatcher.group(6));
+			infN = Integer.parseInt(uriMatcher.group(7));
+		} catch(NumberFormatException ex) {
+			throw new BadRequest(ex);
+		}
 	}
 
 	@Override

@@ -9,6 +9,11 @@ public class HttpError extends Exception {
 		this.status = status;
 	}
 
+	public HttpError(int status, Throwable cause) {
+		super(cause);
+		this.status = status;
+	}
+
 	public int getStatus() {
 		return this.status;
 	}
