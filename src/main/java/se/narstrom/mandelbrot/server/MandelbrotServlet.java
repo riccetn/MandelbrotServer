@@ -57,11 +57,20 @@ public class MandelbrotServlet extends HttpServlet {
 			out.println("P2"); // Magic for "Portable Gray Map" (PGM)
 			out.printf("%d %d%n", width, height);
 			out.println("255"); // No of shades of gray (and no there is not fifty)
-			for(int r = 0; r < height; ++r) {
-				for(int c = 0; c < width; ++c) {
-					if(c != 0)
-						out.write(' ');
-					out.print((r+c)%255);
+			for(int row = 0; row < height; ++row) {
+				for(int col = 0; col < width; ++col) {
+					Complex c = new Complex(
+							minC.getReal() + col*(maxC.getReal() - minC.getReal())/width,
+							minC.getImaginary() + row*(maxC.getImaginary() - minC.getImaginary())/height);
+					Complex z = Complex.ZERO;
+					int nIterations = 0;
+					while(nIterations < infN && z.abs() <= c.abs()) {
+						z = z.multiply(z).add(c);
+						++nIterations;
+					}
+					if(col != 0)
+						out.print(' ');
+					out.print(nIterations % 256);
 				}
 				out.println();
 			}
