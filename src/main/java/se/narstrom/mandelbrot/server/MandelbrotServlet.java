@@ -1,10 +1,13 @@
 package se.narstrom.mandelbrot.server;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriter;
+import javax.inject.Inject;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +24,9 @@ public class MandelbrotServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private static final Pattern uriPattern = Pattern.compile("/mandelbrot/(.*)/(.*)/(.*)/(.*)/(.*)/(.*)/(.*)");
+
+	@Inject
+	private MandelbrotGenerator generator;
 
 	private Complex minC, maxC;
 	private int width, height;
@@ -49,31 +55,13 @@ public class MandelbrotServlet extends HttpServlet {
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		try {
-			PrintWriter out = response.getWriter();
 			this.parseURI(request.getRequestURI());
 
-			//response.setContentType("application/x-portable-graymap");
-			response.setContentType("text/plain");
-			out.println("P2"); // Magic for "Portable Gray Map" (PGM)
-			out.printf("%d %d%n", width, height);
-			out.println("255"); // No of shades of gray (and no there is not fifty)
-			for(int row = 0; row < height; ++row) {
-				for(int col = 0; col < width; ++col) {
-					Complex c = new Complex(
-							minC.getReal() + col*(maxC.getReal() - minC.getReal())/width,
-							minC.getImaginary() + row*(maxC.getImaginary() - minC.getImaginary())/height);
-					Complex z = Complex.ZERO;
-					int nIterations = 0;
-					while(nIterations < infN && z.abs() <= c.abs()) {
-						z = z.multiply(z).add(c);
-						++nIterations;
-					}
-					if(col != 0)
-						out.print(' ');
-					out.print(nIterations % 256);
-				}
-				out.println();
-			}
+			response.setContentType("image/png");
+			BufferedImage img = generator.generate(minC.getReal(), maxC.getReal(), minC.getImaginary(), maxC.getImaginary(), width, height, infN);
+			ImageWriter writer = ImageIO.getImageWritersByMIMEType("image/png").next();
+			writer.setOutput(ImageIO.createImageOutputStream(response.getOutputStream()));
+			writer.write(img);
 		} catch(HttpError err) {
 			response.sendError(err.getStatus(), err.getMessage());
 		}
