@@ -45,7 +45,7 @@ public class MandelbrotGenerator {
 			for(int col = 0; col < width; ++col) {
 				Complex c = new Complex(
 						minReal + col*(maxReal - minReal)/width,
-						minImag + row*(maxImag - minImag)/height);
+						maxImag - row*(maxImag - minImag)/height);
 				Complex z = Complex.ZERO;
 				int nIterations = 0;
 				while(nIterations < nMaxIterations && z.abs() <= 4) {
