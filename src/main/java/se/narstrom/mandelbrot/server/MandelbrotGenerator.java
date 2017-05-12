@@ -7,7 +7,29 @@ import java.awt.image.WritableRaster;
 
 import org.apache.commons.math3.complex.Complex;
 
+/**
+ * Mandelbrot set image generator.
+ *
+ * <p>
+ * Used to generate an gray scale image of the mandelbrot set.
+ * </p>
+ *
+ * @author Rickard Närström &lt;rickard@narstrom.se&gt;
+ * @see <a href="https://en.wikipedia.org/wiki/Mandelbrot_set">Mandelbrot Set on Wikipedia</a>
+ */
 public class MandelbrotGenerator {
+	/**
+	 * Do the actual image generation.
+	 *
+	 * @param minReal			The lower end of the real (horizontal) axis
+	 * @param maxReal			The higher end of the real (horizontal) axis
+	 * @param minImag			The lower end of the imaginary (vertical) axis
+	 * @param maxImag			The higher end of the imaginary (vertical) axis
+	 * @param width				Horizontal resolution of the output image
+	 * @param height			Vertical resolution of the output image
+	 * @param nMaxIterations	Maximum number of iterations before giving up
+	 * @return The generated image
+	 */
 	public BufferedImage generate(double minReal, double maxReal, double minImag, double maxImag, int width, int height, int nMaxIterations) {
 		if(minReal > maxReal)
 			throw new IllegalArgumentException();

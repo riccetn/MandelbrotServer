@@ -17,7 +17,7 @@ import org.apache.commons.math3.complex.Complex;
 
 /**
  *
- * @author Rickard Närström <rickard@narstrom.se>
+ * @author Rickard Närström &lt;rickard@narstrom.se&gt;
  */
 @WebServlet("/mandelbrot/*")
 public class MandelbrotServlet extends HttpServlet {
