@@ -1,12 +1,12 @@
 package se.narstrom.mandelbrot.server;
 
 import java.awt.image.BufferedImage;
+import java.awt.image.Raster;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.imageio.ImageIO;
-import javax.imageio.ImageWriter;
 import javax.inject.Inject;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -57,11 +57,26 @@ public class MandelbrotServlet extends HttpServlet {
 		try {
 			this.parseURI(request.getRequestURI());
 
-			response.setContentType("image/png");
 			BufferedImage img = generator.generate(minC.getReal(), maxC.getReal(), minC.getImaginary(), maxC.getImaginary(), width, height, infN);
-			ImageWriter writer = ImageIO.getImageWritersByMIMEType("image/png").next();
-			writer.setOutput(ImageIO.createImageOutputStream(response.getOutputStream()));
-			writer.write(img);
+			Raster raster = img.getData();
+			response.setContentType("image/x-portable-graymap");
+			response.setHeader("Content-Disposition", "attachment; filename=\"mandelbrot.pgm\"");
+			PrintWriter out = response.getWriter();
+			out.println("P2"); // Magic
+			out.println(img.getWidth() + " " + img.getHeight());
+			out.println("255");
+			for(int row = 0; row < img.getHeight(); ++row) {
+				for(int col = 0; col < img.getWidth(); ++col) {
+					if(col != 0)
+						out.print(' ');
+					out.print(raster.getSample(col, row, 0));
+				}
+				out.println();
+			}
+
+			//ImageWriter writer = ImageIO.getImageWritersByMIMEType("image/png").next();
+			//writer.setOutput(ImageIO.createImageOutputStream(response.getOutputStream()));
+			//writer.write(img);
 		} catch(HttpError err) {
 			response.sendError(err.getStatus(), err.getMessage());
 		}
