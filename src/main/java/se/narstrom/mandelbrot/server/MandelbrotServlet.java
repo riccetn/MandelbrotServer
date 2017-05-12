@@ -3,6 +3,7 @@ package se.narstrom.mandelbrot.server;
 import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -61,7 +62,7 @@ public class MandelbrotServlet extends HttpServlet {
 			Raster raster = img.getData();
 			response.setContentType("image/x-portable-graymap");
 			response.setHeader("Content-Disposition", "attachment; filename=\"mandelbrot.pgm\"");
-			PrintWriter out = response.getWriter();
+			PrintWriter out = new PrintWriter(new OutputStreamWriter(response.getOutputStream(), "US-ASCII"));
 			out.println("P2"); // Magic
 			out.println(img.getWidth() + " " + img.getHeight());
 			out.println("255");
