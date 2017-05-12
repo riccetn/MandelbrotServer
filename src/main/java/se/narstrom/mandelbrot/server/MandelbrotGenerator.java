@@ -48,7 +48,7 @@ public class MandelbrotGenerator {
 						minImag + row*(maxImag - minImag)/height);
 				Complex z = Complex.ZERO;
 				int nIterations = 0;
-				while(nIterations < nMaxIterations && z.abs() <= c.abs()) {
+				while(nIterations < nMaxIterations && z.abs() <= 4) {
 					z = z.multiply(z).add(c);
 					++nIterations;
 				}
