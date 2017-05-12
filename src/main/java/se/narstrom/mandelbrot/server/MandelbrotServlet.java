@@ -65,7 +65,7 @@ public class MandelbrotServlet extends HttpServlet {
 			PrintWriter out = new PrintWriter(new OutputStreamWriter(response.getOutputStream(), "US-ASCII"));
 			out.println("P2"); // Magic
 			out.println(img.getWidth() + " " + img.getHeight());
-			out.println("255");
+			out.println("256");
 			for(int row = 0; row < img.getHeight(); ++row) {
 				for(int col = 0; col < img.getWidth(); ++col) {
 					if(col != 0)
@@ -74,10 +74,7 @@ public class MandelbrotServlet extends HttpServlet {
 				}
 				out.println();
 			}
-
-			//ImageWriter writer = ImageIO.getImageWritersByMIMEType("image/png").next();
-			//writer.setOutput(ImageIO.createImageOutputStream(response.getOutputStream()));
-			//writer.write(img);
+			out.flush();
 		} catch(HttpError err) {
 			response.sendError(err.getStatus(), err.getMessage());
 		}
