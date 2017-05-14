@@ -17,6 +17,13 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 
+
+/**
+ * A <code>MessageBodyWriter</code> that serialize <code>BufferdImage</code> objects as
+ * the portable graymap image format.
+ *
+ * @author Rickard Närström &lt;rickard@narstrom.se&gt;
+ */
 @Provider
 @Produces("application/x-portable-graymap")
 public class PortableGraymapWriter implements MessageBodyWriter<BufferedImage> {
