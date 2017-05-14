@@ -22,7 +22,7 @@ import javax.ws.rs.ext.Provider;
 public class PortableGraymapWriter implements MessageBodyWriter<BufferedImage> {
 
 	@Override
-	public long getSize(BufferedImage arg0, Class<?> arg1, Type arg2, Annotation[] arg3, MediaType arg4) {
+	public long getSize(BufferedImage img, Class<?> cls, Type type, Annotation[] annotations, MediaType mediaType) {
 		// this method is deprecated since JAX-RS 2.0, the official recommendation is to return -1
 		return -1;
 	}
